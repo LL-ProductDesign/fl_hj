@@ -4,124 +4,188 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fluency Lab – Hotjar Survey Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
+  /* ── Learnlight Design Tokens ── */
   :root {
-    --bg: #0D1117;
-    --surface: #161B22;
-    --surface-hover: #1C2333;
-    --border: #30363D;
-    --text: #E6EDF3;
-    --text-muted: #8B949E;
-    --accent: #00C9A7;
-    --accent-dim: rgba(0,201,167,0.15);
-    --danger: #F85149;
-    --danger-dim: rgba(248,81,73,0.15);
-    --warning: #D29922;
-    --warning-dim: rgba(210,153,34,0.15);
-    --purple: #A371F7;
-    --purple-dim: rgba(163,113,247,0.15);
-    --blue: #58A6FF;
-    --blue-dim: rgba(88,166,255,0.15);
-    --star: #F0C000;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'DM Sans', -apple-system, sans-serif;
+    --background-primary:    #ffffff;
+    --background-secondary:  #f5f6f7;
+    --background-brand:      #0276b1;
+    --background-green-light:#ecf9f1;
+    --background-yellow-light:#fff3d2;
+    --background-red-light:  #fcdfe0;
+    --background-blue-light: #e3f4fd;
+    --background-green:      #2c8150;
+    --background-error:      #fef5f5;
+    --background-warning:    #fffbf5;
+
+    --text-primary:   #092f42;
+    --text-secondary: #5d7682;
+    --text-brand:     #0276b1;
+    --text-invert:    #ffffff;
+    --text-error:     #ca2b34;
+    --text-warning:   #a35905;
+    --text-green:     #287147;
+    --text-disabled:  #b3bec4;
+
+    --border-color-primary: #dfe4e6;
+    --border-color-brand:   #0276b1;
+
+    --green-500:  #2c8150;
+    --blue-500:   #0276b1;
+    --blue-50:    #e3f4fd;
+    --blue-100:   #b7e4fb;
+    --yellow-600: #f0a505;
+    --yellow-50:  #fff3d2;
+    --orange-600: #ff9a1f;
+    --red-600:    #ca2b34;
+    --red-50:     #fcdfe0;
+    --green-50:   #ecf9f1;
+
+    --shadow-card:   2px 2px 8px 0 rgba(9,30,66,0.10);
+    --shadow-subtle: 0 1px 3px 0 rgba(9,30,66,0.06);
+
+    --border-radius-medium: 8px;
+    --border-radius-large:  16px;
+    --border-radius-max:    999px;
+
+    --font-family-base: 'Fira Sans', -apple-system, sans-serif;
+
+    --spacing-xs:  8px;
+    --spacing-sm:  12px;
+    --spacing-md:  16px;
+    --spacing-lg:  24px;
+    --spacing-xl:  32px;
+    --spacing-xxl: 48px;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    padding: 32px 24px;
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    font-family: var(--font-family-base);
+    font-size: 16px;
+    line-height: 22px;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* ---- Header ---- */
-  .header { margin-bottom: 32px; }
-  .header .dot {
-    display: inline-block;
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 8px rgba(0,201,167,0.53);
-    vertical-align: middle;
-    margin-right: 8px;
+  /* ── Page Header ── */
+  .page-header {
+    background: var(--background-primary);
+    border-bottom: 1px solid var(--border-color-primary);
+    box-shadow: 0 2px 4px 0 rgba(9,30,66,0.10);
+    padding: 20px var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
   }
-  .header .label {
-    font-size: 12px; color: var(--accent);
-    font-weight: 600; letter-spacing: 1.5px;
-    text-transform: uppercase; vertical-align: middle;
+  .page-header .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-brand);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
   }
-  .header h1 {
-    font-size: 28px; font-weight: 700;
-    letter-spacing: -0.5px; margin-top: 6px;
+  .page-header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 40px;
+    color: var(--text-primary);
   }
-  .header .sub {
-    font-size: 13px; color: var(--text-muted); margin-top: 4px;
+  .page-header .sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 2px;
   }
 
-  /* ---- Cards / Panels ---- */
+  /* ── Layout ── */
+  .page-body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-xl) var(--spacing-xl);
+  }
+
+  /* ── Cards ── */
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
+    background: var(--background-primary);
+    border: 1px solid var(--border-color-primary);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-lg);
   }
   .card h3 {
-    font-size: 14px; font-weight: 600;
-    letter-spacing: 0.3px; margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
   }
 
-  /* ---- KPI Row ---- */
+  /* ── KPI Row ── */
   .kpi-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
   }
-  .kpi .kpi-label {
-    font-size: 11px; color: var(--text-muted);
-    font-weight: 500; letter-spacing: 0.6px;
-    text-transform: uppercase; margin-bottom: 6px;
+  .kpi-card {
+    background: var(--background-primary);
+    border: 1px solid var(--border-color-primary);
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-lg);
+    border-top-width: 3px;
   }
-  .kpi .kpi-value {
-    font-size: 32px; font-weight: 700;
-    font-family: var(--mono); line-height: 1.1;
+  .kpi-card .kpi-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-xs);
   }
-  .kpi .kpi-sub {
-    font-size: 12px; color: var(--text-muted); margin-top: 4px;
+  .kpi-card .kpi-value {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .kpi-card .kpi-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
   }
 
-  /* ---- Grid layouts ---- */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  /* ── Grid layouts ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
 
-  /* ---- Rating bars ---- */
+  /* ── Rating bars ── */
   .rating-row {
     display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
   }
   .rating-row .num {
-    font-size: 13px; font-weight: 600; width: 18px; text-align: right;
+    font-size: 14px; font-weight: 600; width: 18px;
+    text-align: right; color: var(--text-primary);
   }
-  .rating-row .star-icon { color: var(--star); font-size: 12px; }
+  .rating-row .star-icon { color: var(--yellow-600); font-size: 13px; }
   .rating-row .bar-track {
     flex: 1; height: 20px;
-    background: var(--bg); border-radius: 4px; overflow: hidden;
+    background: var(--background-secondary);
+    border-radius: var(--border-radius-medium);
+    overflow: hidden;
   }
   .rating-row .bar-fill {
-    height: 100%; border-radius: 4px;
+    height: 100%;
+    border-radius: var(--border-radius-medium);
     transition: width 0.7s cubic-bezier(0.22,1,0.36,1);
   }
   .rating-row .meta {
-    font-size: 12px; color: var(--text-muted);
-    width: 72px; text-align: right;
-    font-family: var(--mono);
+    font-size: 13px; color: var(--text-secondary);
+    width: 80px; text-align: right;
   }
-  .rating-row .meta .pct { opacity: 0.5; }
+  .rating-row .meta .pct { opacity: 0.7; }
 
-  /* ---- Daily chart ---- */
+  /* ── Daily chart ── */
   .daily-chart {
     display: flex; align-items: flex-end; gap: 8px;
     height: 130px; padding: 0 4px;
@@ -131,157 +195,188 @@
     align-items: center; gap: 6px;
   }
   .daily-col .val {
-    font-size: 11px; color: var(--accent);
-    font-weight: 700; font-family: var(--mono);
+    font-size: 12px; color: var(--text-brand);
+    font-weight: 600;
   }
   .daily-col .bar {
     width: 100%; max-width: 52px;
     border-radius: 4px 4px 0 0;
-    background: linear-gradient(180deg, var(--accent), rgba(0,201,167,0.53));
+    background: linear-gradient(180deg, var(--blue-500), var(--blue-100));
     transition: height 0.6s cubic-bezier(0.22,1,0.36,1);
   }
   .daily-col .lbl {
-    font-size: 10px; color: var(--text-muted); white-space: nowrap;
+    font-size: 11px; color: var(--text-secondary); white-space: nowrap;
   }
 
-  /* ---- Donut ---- */
-  .donut-wrap { display: flex; align-items: center; gap: 16px; }
-  .legend { display: flex; flex-direction: column; gap: 5px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  /* ── Donut ── */
+  .donut-wrap { display: flex; align-items: center; gap: var(--spacing-md); }
+  .legend { display: flex; flex-direction: column; gap: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-  .legend-item .lbl { color: var(--text-muted); }
-  .legend-item .val { color: var(--text); font-weight: 600; font-family: var(--mono); }
-  .legend-item .pct { color: var(--text-muted); font-size: 10px; }
+  .legend-item .lbl { color: var(--text-secondary); }
+  .legend-item .val { color: var(--text-primary); font-weight: 600; }
+  .legend-item .pct { color: var(--text-secondary); font-size: 11px; }
 
-  /* ---- Insights ---- */
+  /* ── Insights ── */
   .insights {
-    background: linear-gradient(135deg, var(--accent-dim), var(--surface));
-    border: 1px solid rgba(0,201,167,0.27);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 24px;
+    background: var(--background-primary);
+    border: 1px solid var(--border-color-brand);
+    border-left-width: 3px;
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
   }
   .insights h3 {
-    font-size: 14px; font-weight: 600;
-    color: var(--accent); letter-spacing: 0.3px;
-    margin-bottom: 12px;
+    font-size: 16px; font-weight: 600;
+    color: var(--text-brand);
+    margin-bottom: var(--spacing-sm);
   }
   .insights-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-lg);
+    margin-top: var(--spacing-md);
   }
-  .insights-grid p {
-    font-size: 13px; line-height: 1.6;
+  .insight-block {
+    background: var(--background-secondary);
+    border-radius: var(--border-radius-medium);
+    padding: var(--spacing-md);
+  }
+  .insight-block strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .insight-block p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
   }
 
-  /* ---- Comment Tabs ---- */
-  .tabs { display: flex; gap: 0; margin-bottom: 20px; }
+  /* ── Comment Tabs ── */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border-color-primary);
+    margin-bottom: var(--spacing-md);
+  }
   .tab-btn {
-    padding: 8px 20px;
+    padding: 10px 20px;
     border: none; background: transparent;
-    color: var(--text-muted);
-    font-weight: 600; font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600; font-size: 14px;
     cursor: pointer;
     border-bottom: 2px solid transparent;
-    border-radius: 6px 6px 0 0;
-    font-family: var(--sans);
+    margin-bottom: -2px;
+    font-family: var(--font-family-base);
     transition: all 0.2s;
   }
   .tab-btn.active {
-    background: rgba(0,201,167,0.13);
-    color: var(--accent);
-    border-bottom-color: var(--accent);
+    color: var(--text-brand);
+    border-bottom-color: var(--border-color-brand);
   }
-  .tab-btn:hover:not(.active) { color: var(--text); }
+  .tab-btn:hover:not(.active) {
+    color: var(--text-primary);
+    background: var(--background-secondary);
+    border-radius: 6px 6px 0 0;
+  }
 
   .comments-scroll {
     max-height: 420px;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: var(--border-color-primary) transparent;
   }
 
   .comment {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
+    background: var(--background-primary);
+    border: 1px solid var(--border-color-primary);
+    border-radius: var(--border-radius-medium);
+    padding: 12px var(--spacing-md);
     margin-bottom: 8px;
     border-left-width: 3px;
     border-left-style: solid;
+    box-shadow: var(--shadow-subtle);
   }
   .comment .meta-row {
     display: flex; align-items: center; gap: 8px;
     flex-wrap: wrap; margin-bottom: 6px;
   }
-  .comment .stars { color: var(--star); letter-spacing: 1px; font-size: 11px; }
+  .comment .stars { letter-spacing: 1px; font-size: 12px; }
   .comment .stars .dim { opacity: 0.2; }
-  .comment .quote { font-size: 13px; line-height: 1.5; }
+  .comment .quote {
+    font-size: 14px; line-height: 1.6;
+    color: var(--text-primary);
+  }
 
   .pill {
     display: inline-block;
-    padding: 2px 8px;
-    border-radius: 99px;
-    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: var(--border-radius-max);
+    font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.3px;
   }
-  .sent-label { font-size: 11px; font-weight: 600; }
+  .sent-label { font-size: 12px; font-weight: 600; }
 
   .footer {
-    text-align: center; margin-top: 24px;
-    font-size: 11px; color: var(--text-muted);
+    text-align: center; margin-top: var(--spacing-lg);
+    font-size: 12px; color: var(--text-secondary);
+    padding-bottom: var(--spacing-xl);
   }
 
-  /* ---- Responsive ---- */
+  /* ── Responsive ── */
   @media (max-width: 900px) {
+    .page-header { padding: 16px var(--spacing-md); }
+    .page-body { padding: 0 var(--spacing-md) var(--spacing-lg); }
     .kpi-row { grid-template-columns: repeat(2, 1fr); }
     .grid-2, .grid-3, .insights-grid { grid-template-columns: 1fr; }
   }
 
-  /* ---- Animations ---- */
+  /* ── Animations ── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  .anim { animation: fadeUp 0.5s ease both; }
+  .anim { animation: fadeUp 0.45s ease both; }
   .d1 { animation-delay: 0.05s; }
-  .d2 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.10s; }
   .d3 { animation-delay: 0.15s; }
-  .d4 { animation-delay: 0.2s; }
+  .d4 { animation-delay: 0.20s; }
   .d5 { animation-delay: 0.25s; }
-  .d6 { animation-delay: 0.3s; }
+  .d6 { animation-delay: 0.30s; }
   .d7 { animation-delay: 0.35s; }
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header anim d1">
-  <div><span class="dot"></span><span class="label">Hotjar Survey Results</span></div>
+<!-- Page Header -->
+<div class="page-header anim d1">
+  <div class="eyebrow">Hotjar Survey Results</div>
   <h1>Fluency Lab Experience</h1>
   <p class="sub">May 19 – May 24, 2026 · 461 responses</p>
 </div>
 
+<div class="page-body">
+
 <!-- KPI Row -->
 <div class="kpi-row anim d2">
-  <div class="card kpi">
+  <div class="kpi-card" style="border-top-color:var(--yellow-600)">
     <div class="kpi-label">Avg Rating</div>
-    <div class="kpi-value" style="color:var(--star)">3.9 ★</div>
+    <div class="kpi-value" style="color:var(--yellow-600)">3.9 ★</div>
     <div class="kpi-sub">out of 5.0</div>
   </div>
-  <div class="card kpi">
+  <div class="kpi-card" style="border-top-color:var(--green-500)">
     <div class="kpi-label">Promoters</div>
-    <div class="kpi-value" style="color:var(--accent)">71%</div>
+    <div class="kpi-value" style="color:var(--green-500)">71%</div>
     <div class="kpi-sub">325 rated 4–5</div>
   </div>
-  <div class="card kpi">
+  <div class="kpi-card" style="border-top-color:var(--red-600)">
     <div class="kpi-label">Detractors</div>
-    <div class="kpi-value" style="color:var(--danger)">17%</div>
+    <div class="kpi-value" style="color:var(--red-600)">17%</div>
     <div class="kpi-sub">79 rated 1–2</div>
   </div>
-  <div class="card kpi">
+  <div class="kpi-card" style="border-top-color:var(--blue-500)">
     <div class="kpi-label">Comment Rate</div>
-    <div class="kpi-value" style="color:var(--blue)">15%</div>
+    <div class="kpi-value" style="color:var(--blue-500)">15%</div>
     <div class="kpi-sub">68 text responses</div>
   </div>
 </div>
@@ -316,11 +411,20 @@
 
 <!-- Insights -->
 <div class="insights anim d5">
-  <h3>⚡ Key Insights</h3>
+  <h3>Key Insights</h3>
   <div class="insights-grid">
-    <p><strong style="color:var(--danger)">22 bug reports</strong><br>Most 1★ reviews cite connection failures or "it doesn't work" — likely technical blockers preventing users from even starting sessions.</p>
-    <p><strong style="color:var(--warning)">7 speed complaints</strong><br>AI avatar speaks too fast for lower-level learners. Multiple users explicitly request a speed control button.</p>
-    <p><strong style="color:var(--accent)">Loved by fans</strong><br>55% gave 5★. Users praise natural voice quality, pronunciation practice, and anytime accessibility.</p>
+    <div class="insight-block">
+      <strong style="color:var(--text-error)">22 bug reports</strong>
+      <p>Most 1★ reviews cite connection failures or "it doesn't work" — likely technical blockers preventing users from even starting sessions.</p>
+    </div>
+    <div class="insight-block">
+      <strong style="color:var(--text-warning)">7 speed complaints</strong>
+      <p>AI avatar speaks too fast for lower-level learners. Multiple users explicitly request a speed control button.</p>
+    </div>
+    <div class="insight-block">
+      <strong style="color:var(--text-green)">Loved by fans</strong>
+      <p>55% gave 5★. Users praise natural voice quality, pronunciation practice, and anytime accessibility.</p>
+    </div>
   </div>
 </div>
 
@@ -335,6 +439,8 @@
 
 <div class="footer anim d7">Fluency Lab · Hotjar Survey #943308 · Data from May 19 – May 24, 2026</div>
 
+</div><!-- /page-body -->
+
 <script>
 // ── DATA ──
 const RATINGS = { 5: 253, 4: 72, 3: 57, 2: 27, 1: 52 };
@@ -347,7 +453,13 @@ const DAILY = [
   { date: "May 23", count: 34 },
   { date: "May 24", count: 19 },
 ];
-const RATING_COLORS = { 1:"#F85149", 2:"#F09050", 3:"#D29922", 4:"#58A6FF", 5:"#00C9A7" };
+const RATING_COLORS = {
+  1: "#ca2b34",
+  2: "#ff9a1f",
+  3: "#f0a505",
+  4: "#0276b1",
+  5: "#2c8150"
+};
 
 const IMPROVE = [
   { r:1, text:"I can't access", tag:"Bug", sent:"negative" },
@@ -417,7 +529,7 @@ const barsEl = document.getElementById("rating-bars");
     <span class="num">${r}</span>
     <span class="star-icon">★</span>
     <div class="bar-track">
-      <div class="bar-fill" style="width:0%;background:linear-gradient(90deg,${RATING_COLORS[r]}cc,${RATING_COLORS[r]})"></div>
+      <div class="bar-fill" style="width:0%;background:${RATING_COLORS[r]}"></div>
     </div>
     <span class="meta">${count} <span class="pct">(${pct}%)</span></span>`;
   barsEl.appendChild(row);
@@ -460,7 +572,7 @@ function renderDonut(containerId, data, colors) {
     const x2 = cx + r * Math.cos(eRad), y2 = cy + r * Math.sin(eRad);
     const ix1 = cx + ir * Math.cos(eRad), iy1 = cy + ir * Math.sin(eRad);
     const ix2 = cx + ir * Math.cos(sRad), iy2 = cy + ir * Math.sin(sRad);
-    paths += `<path d="M${x1},${y1} A${r},${r} 0 ${la} 1 ${x2},${y2} L${ix1},${iy1} A${ir},${ir} 0 ${la} 0 ${ix2},${iy2} Z" fill="${colors[i]}" opacity="0.9"/>`;
+    paths += `<path d="M${x1},${y1} A${r},${r} 0 ${la} 1 ${x2},${y2} L${ix1},${iy1} A${ir},${ir} 0 ${la} 0 ${ix2},${iy2} Z" fill="${colors[i]}"/>`;
   });
   let legend = entries.map(([key, val], i) =>
     `<div class="legend-item">
@@ -474,36 +586,42 @@ function renderDonut(containerId, data, colors) {
 }
 
 renderDonut("donut-device",
-  { desktop: 436, phone: 21, tablet: 4 },
-  ["#00C9A7","#58A6FF","#A371F7"]
+  { Desktop: 436, Phone: 21, Tablet: 4 },
+  ["#0276b1","#b7e4fb","#09608b"]
 );
 renderDonut("donut-tags",
   { Bug: 22, UX: 7, "Feature req": 3, Other: 3 },
-  ["#F85149","#A371F7","#58A6FF","#D29922"]
+  ["#ca2b34","#7a63b1","#0276b1","#f0a505"]
 );
 renderDonut("donut-sent",
-  { negative: 33, neutral: 8, positive: 3 },
-  ["#F85149","#D29922","#00C9A7"]
+  { Negative: 33, Neutral: 8, Positive: 3 },
+  ["#ca2b34","#f0a505","#2c8150"]
 );
 
 // ── COMMENTS ──
-const SENT_ICON = { negative:"−", neutral:"○", positive:"+" };
-const SENT_COLOR = { negative:"#F85149", neutral:"#D29922", positive:"#00C9A7" };
-const TAG_STYLE = {
-  Bug: { c:"#F85149", bg:"rgba(248,81,73,0.15)" },
-  UX:  { c:"#A371F7", bg:"rgba(163,113,247,0.15)" },
-  "Feature request": { c:"#58A6FF", bg:"rgba(88,166,255,0.15)" },
+const SENT_COLOR = { negative:"#ca2b34", neutral:"#a35905", positive:"#287147" };
+const SENT_BG    = { negative:"#fcdfe0", neutral:"#fff3d2", positive:"#ecf9f1" };
+const SENT_ICON  = { negative:"−", neutral:"○", positive:"+" };
+const TAG_STYLE  = {
+  Bug:              { c:"#ca2b34", bg:"#fcdfe0" },
+  UX:               { c:"#6e55aa", bg:"#d0c8e5" },
+  "Feature request":{ c:"#0276b1", bg:"#e3f4fd" },
 };
 
 function stars(n) {
-  return "★".repeat(n) + `<span class="dim">${"★".repeat(5 - n)}</span>`;
+  const c = RATING_COLORS[n] || "#f0a505";
+  return `<span style="color:${c}">${"★".repeat(n)}</span><span class="dim" style="color:#dfe4e6">${"★".repeat(5-n)}</span>`;
 }
 
 function renderComment(c, isLike) {
-  const borderColor = RATING_COLORS[c.r] || "#30363D";
-  const tag = c.tag ? `<span class="pill" style="color:${(TAG_STYLE[c.tag]||TAG_STYLE.UX).c};background:${(TAG_STYLE[c.tag]||TAG_STYLE.UX).bg}">${c.tag}</span>` : "";
-  const sent = (c.sent || (isLike ? "positive" : ""))
-    ? `<span class="sent-label" style="color:${SENT_COLOR[c.sent || "positive"]}">${SENT_ICON[c.sent || "positive"]} ${c.sent || "positive"}</span>` : "";
+  const borderColor = RATING_COLORS[c.r] || "#dfe4e6";
+  const tag = c.tag
+    ? `<span class="pill" style="color:${(TAG_STYLE[c.tag]||TAG_STYLE.UX).c};background:${(TAG_STYLE[c.tag]||TAG_STYLE.UX).bg}">${c.tag}</span>`
+    : "";
+  const sentKey = c.sent || (isLike ? "positive" : "");
+  const sent = sentKey
+    ? `<span class="sent-label" style="color:${SENT_COLOR[sentKey]};background:${SENT_BG[sentKey]};padding:2px 8px;border-radius:999px">${SENT_ICON[sentKey]} ${sentKey}</span>`
+    : "";
   return `<div class="comment" style="border-left-color:${borderColor}">
     <div class="meta-row">
       <span class="stars">${stars(c.r)}</span>
@@ -516,11 +634,8 @@ function renderComment(c, isLike) {
 let currentTab = "improve";
 function renderComments() {
   const container = document.getElementById("comments-container");
-  if (currentTab === "improve") {
-    container.innerHTML = IMPROVE.map(c => renderComment(c, false)).join("");
-  } else {
-    container.innerHTML = LIKES.map(c => renderComment(c, true)).join("");
-  }
+  container.innerHTML = (currentTab === "improve" ? IMPROVE : LIKES)
+    .map(c => renderComment(c, currentTab === "likes")).join("");
 }
 
 function switchTab(tab) {
